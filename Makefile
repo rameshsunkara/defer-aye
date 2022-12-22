@@ -3,8 +3,7 @@ PWD = $(shell pwd)
 
 # constants
 GOLANGCI_VERSION = 1.50.1
-DOCKER_REPO = defer-aye
-DOCKER_TAG = latest
+
 
 all: git-hooks  tidy ## Initializes all tools
 
@@ -22,9 +21,6 @@ tidy: ## Cleans up go.mod and go.sum
 
 fmt: ## Formats all code with go fmt
 	@go fmt ./...
-
-run: fmt ## Run the app
-	@go run ./cmd/defer-aye/main.go
 
 test-build: ## Tests whether the code compiles
 	@go build -o /dev/null ./...
@@ -66,10 +62,7 @@ out/report.json: out
 	@go test -count 1 ./... -coverprofile=out/cover.out --json | tee "$(@)"
 
 clean: ## Cleans up everything
-	@rm -rf bin out 
-
-docker: ## Builds docker image
-	docker buildx build -t $(DOCKER_REPO):$(DOCKER_TAG) .
+	@rm -rf bin out
 
 ci: lint-reports test-reports ## Executes lint and test and generates reports
 

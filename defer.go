@@ -1,4 +1,4 @@
-package terminate
+package deferrun
 
 import (
 	"os"
@@ -7,20 +7,20 @@ import (
 	"syscall"
 )
 
-type DeferredRun struct {
+type DeferRun struct {
 	Signals       []os.Signal
 	deferredFuncs []func()
 	runOnce       sync.Once
 }
 
-func (dr *DeferredRun) OnTerminate(deferFunc func()) {
+func (dr *DeferRun) OnTerminate(deferFunc func()) {
 	dr.deferredFuncs = append([]func(){deferFunc}, dr.deferredFuncs...)
 	dr.runOnce.Do(func() {
 		dr.run()
 	})
 }
 
-func (dr *DeferredRun) run() {
+func (dr *DeferRun) run() {
 	signalsChan := make(chan os.Signal, 1)
 
 	if dr.Signals == nil {

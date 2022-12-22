@@ -1,4 +1,4 @@
-package terminate
+package deferrun
 
 import (
 	"fmt"
@@ -10,12 +10,12 @@ import (
 )
 
 func TestOnTerminate(t *testing.T) {
-	term := DeferredRun{}
+	term := DeferRun{}
 	term.OnTerminate(func() {
-		fmt.Println("Test func 1")
+		fmt.Println("Clean func 1")
 	})
 	term.OnTerminate(func() {
-		fmt.Println("Test func 2")
+		fmt.Println("Clean func 2")
 	})
 	assert.EqualValues(t, 3, len(term.Signals))
 	assert.EqualValues(t, []os.Signal{os.Interrupt, syscall.SIGTERM, syscall.SIGINT}, term.Signals)
@@ -23,7 +23,7 @@ func TestOnTerminate(t *testing.T) {
 }
 
 func TestCustomSignals(t *testing.T) {
-	term := DeferredRun{
+	term := DeferRun{
 		Signals: []os.Signal{os.Interrupt, syscall.SIGTERM},
 	}
 	assert.EqualValues(t, 2, len(term.Signals))
