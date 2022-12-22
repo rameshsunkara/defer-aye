@@ -15,7 +15,7 @@ linters:
     - exhaustive # check exhaustiveness of enum switch statements
     - exportloopref # checks for pointers to enclosing loop variables
     - funlen # Tool for detection of long functions
-    # - gochecknoglobals # A global variable is a variable declared in package scope and that can be read and written to by any function within the package.
+    - gochecknoglobals # A global variable is a variable declared in package scope and that can be read and written to by any function within the package.
     - gocritic # Provides diagnostics that check for bugs, performance and style issues.
     - goconst # Inspects source code for security problems
     - gocyclo # Computes and checks the cyclomatic complexity of functions

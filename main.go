@@ -8,9 +8,10 @@ import (
 
 func main() {
 	fmt.Println("In Main")
-	terminator.OnTerminate(closeDBConnection)
-	terminator.OnTerminate(closeSomeXResource)
-	terminator.OnTerminate(notifyServiceA)
+	t := terminator.DeferredRun{}
+	t.OnTerminate(closeDBConnection)
+	t.OnTerminate(closeSomeXResource)
+	t.OnTerminate(notifyServiceA)
 	/*	defer closeDBConnection()
 		defer closeSomeXResource()
 		defer notifyServiceA()*/
