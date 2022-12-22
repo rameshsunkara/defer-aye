@@ -9,12 +9,12 @@ import (
 
 type DeferredRun struct {
 	Signals       []os.Signal
-	deferredFuncs []func()
+	deferredFuncs []any
 	runOnce       sync.Once
 }
 
-func (dr *DeferredRun) OnTerminate(deferFunc func()) {
-	dr.deferredFuncs = append([]func(){deferFunc}, dr.deferredFuncs...)
+func (dr *DeferredRun) OnTerminate(deferFunc any) {
+	dr.deferredFuncs = append([]any{deferFunc}, dr.deferredFuncs...)
 	dr.runOnce.Do(func() {
 		dr.run()
 	})
