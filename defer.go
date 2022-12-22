@@ -1,4 +1,4 @@
-package terminator
+package main
 
 import (
 	"os"

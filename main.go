@@ -2,20 +2,18 @@ package main
 
 import (
 	"fmt"
-	"github.com/rameshsunkara/defer-aye/terminator"
-	"net/http"
 )
 
 func main() {
 	fmt.Println("In Main")
-	t := terminator.DeferredRun{}
+	t := DeferredRun{}
 	t.OnTerminate(closeDBConnection)
 	t.OnTerminate(closeSomeXResource)
 	t.OnTerminate(notifyServiceA)
 	/*	defer closeDBConnection()
 		defer closeSomeXResource()
 		defer notifyServiceA()*/
-	http.ListenAndServe(":8090", nil)
+	// http.ListenAndServe(":8090", nil)
 }
 
 func closeDBConnection() {
