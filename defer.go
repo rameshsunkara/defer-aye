@@ -32,7 +32,7 @@ func (dr *DeferredRun) run() {
 	go func() {
 		<-signalsChan
 		for _, f := range dr.deferredFuncs {
-			f()
+			f.(func())()
 		}
 		os.Exit(0)
 	}()
