@@ -1,4 +1,4 @@
-module github.com/rameshsunkara/defer-aye
+module github.com/rameshsunkara/deferrun
 
 go 1.19
 
