@@ -2,7 +2,7 @@
 
 [![GoTemplate](https://img.shields.io/badge/go/template-black?logo=go)](https://github.com/SchwarzIT/go-template)
 
-Provides an utility to ensure defer statements are always executed.
+Provides a utility to ensure defer statements are always executed.
 
 The project uses `make` to make your life easier. If you're not familiar with Makefiles you can take a look at [this quickstart guide](https://makefiletutorial.com).
 
