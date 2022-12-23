@@ -2,10 +2,10 @@
 
 # Defer Run (deferrun)
 
-A utility to execute given functions when the configured signal fires.
-Functions are executed in LIFO order just like `defer` statements.
+A utility to execute given functions when the configured signal(s) fire.
+<br>Functions are executed in LIFO order just like `defer` statements.
 
-The default behavior is designed to facilitate executing function(s) on application termination. 
+The default behavior is designed to facilitate executing function(s) on application **termination**. 
 
 ## The Problem
 
@@ -83,7 +83,7 @@ Closing DB Connection
 
 ## Customization | Options
 
-By default, it listens for the following signals:
+By default, it listens for following signals:
 		
 	os.Interrupt, syscall.SIGTERM, syscall.SIGINT
 
@@ -91,6 +91,39 @@ If you want to customize the Signals you want to listen, simply pass whichever s
 
 ```go
 	r := deferrun.NewSignalHandler(syscall.SIGINT, syscall.SIGABRT)
+```
+
+## Limitations
+
+By design, `OnSignal` accepts only functions with no parameters or return values as handling the return values can vary a lot.
+<br> If the method you want to execute has parameters or return values simply wrap it and then use `OnSignal`.
+
+For example, say `closeDBConnection` can return a error. So wrap `closeDBConnection` in no-arg, no-return value function and pass it to `OnSignal`.
+
+```go
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"github.com/rameshsunkara/deferrun"
+)
+
+func main() {
+	fmt.Println("In main")
+	r := deferrun.NewSignalHandler()
+	r.OnSignal(func() {
+		if err := closeDBConnection(); err!= nil {
+			fmt.Println("Too bad, notify everyone as it can cause havoc")
+		}
+	})
+	http.ListenAndServe(":8090", nil)
+}
+
+func closeDBConnection() error {
+	fmt.Println("Closing DB Connection")
+	return nil
+}
 ```
 
 ## Development
