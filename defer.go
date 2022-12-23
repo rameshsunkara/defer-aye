@@ -25,11 +25,14 @@ type deferRun struct {
 	signals       []os.Signal
 	deferredFuncs []func()
 	runOnce       sync.Once
+	mu            sync.Mutex
 }
 
 func (dr *deferRun) OnSignal(deferFunc func()) {
+	dr.mu.Lock()
 	// Prepend as we have to iterate in LIFO order
 	dr.deferredFuncs = append([]func(){deferFunc}, dr.deferredFuncs...)
+	dr.mu.Unlock()
 	dr.runOnce.Do(func() {
 		dr.run()
 	})
