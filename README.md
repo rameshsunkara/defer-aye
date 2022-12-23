@@ -1,4 +1,7 @@
 [![GoTemplate](https://img.shields.io/badge/go/template-black?logo=go)](https://github.com/SchwarzIT/go-template)
+[![Build Status](https://github.com/rameshsunkara/deferrun/actions/workflows/main.yml/badge.svg)](https://github.com/rameshsunkara/deferrun/actions/workflows/main.yml?query=branch%3Amain)
+[![Go Report Card](https://goreportcard.com/badge/github.com/rameshsunkara/deferrun)](https://goreportcard.com/report/github.com/rameshsunkara/deferrun)
+[![codecov](https://codecov.io/gh/rameshsunkara/deferrun/branch/main/graph/badge.svg)](https://app.codecov.io/gh/rameshsunkara/deferrun)
 
 # Defer Run (deferrun)
 
@@ -90,12 +93,12 @@ By default, it listens for following signals:
 If you want to customize the Signals you want to listen, simply pass whichever signals you want:
 
 ```go
-	r := deferrun.NewSignalHandler(syscall.SIGINT, syscall.SIGABRT)
+r := deferrun.NewSignalHandler(syscall.SIGINT, syscall.SIGABRT)
 ```
 
 ## Limitations
 
-By design, `OnSignal` accepts only functions with no parameters or return values as handling the return values can vary a lot.
+By design, `OnSignal` accepts only functions with no parameters or return values as handling the return value should be consumers responsibility and not something that can be generalized.
 <br> If the method you want to execute has parameters or return values simply wrap it and then use `OnSignal`.
 
 For example, say `closeDBConnection` can return a error. So wrap `closeDBConnection` in no-arg, no-return value function and pass it to `OnSignal`.

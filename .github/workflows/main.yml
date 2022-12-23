@@ -56,3 +56,10 @@ jobs:
 
       - name: Runs all tests
         run: make test
+
+      - name: Coverage
+        run: |
+          make coverage
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          chmod +x codecov
+          ./codecov
