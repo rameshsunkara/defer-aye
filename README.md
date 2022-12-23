@@ -10,6 +10,8 @@ A utility to execute given functions when the configured signal(s) fire.
 
 The default behavior is designed to facilitate executing function(s) on application **termination**. 
 
+Usage Example: [go-rest-api-example](https://github.com/rameshsunkara/go-rest-api-example/blob/main/main.go#L71)
+
 ## The Problem
 
 In the below example, methods `closeDBConnection` and `notifyServiceX` will never be executed if the service is terminated.
