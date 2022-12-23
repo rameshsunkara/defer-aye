@@ -1,7 +1,7 @@
 [![GoTemplate](https://img.shields.io/badge/go/template-black?logo=go)](https://github.com/SchwarzIT/go-template)
 [![Build Status](https://github.com/rameshsunkara/deferrun/actions/workflows/main.yml/badge.svg)](https://github.com/rameshsunkara/deferrun/actions/workflows/main.yml?query=branch%3Amain)
 [![Go Report Card](https://goreportcard.com/badge/github.com/rameshsunkara/deferrun)](https://goreportcard.com/report/github.com/rameshsunkara/deferrun)
-[![codecov](https://codecov.io/gh/rameshsunkara/deferrun/branch/main/graph/badge.svg)](https://app.codecov.io/gh/rameshsunkara/deferrun)
+[![codecov](https://codecov.io/gh/rameshsunkara/deferrun/branch/main/graph/badge.svg?token=WDFGFOXNNC)](https://codecov.io/gh/rameshsunkara/deferrun)
 
 # Defer Run (deferrun)
 
