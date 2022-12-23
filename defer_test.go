@@ -1,31 +1,45 @@
-package deferrun
+package deferrun_test
 
 import (
 	"fmt"
-	"os"
+	"reflect"
 	"syscall"
 	"testing"
 
+	"github.com/rameshsunkara/deferrun"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestOnTerminate(t *testing.T) {
-	term := DeferRun{}
-	term.OnTerminate(func() {
+	sHandler := deferrun.NewSignalHandler()
+
+	sHandler.OnSignal(func() {
 		fmt.Println("Clean func 1")
 	})
-	term.OnTerminate(func() {
+	sHandler.OnSignal(func() {
 		fmt.Println("Clean func 2")
 	})
-	assert.EqualValues(t, 3, len(term.Signals))
-	assert.EqualValues(t, []os.Signal{os.Interrupt, syscall.SIGTERM, syscall.SIGINT}, term.Signals)
-	assert.EqualValues(t, 2, len(term.deferredFuncs))
+
+	assert.Implements(t, (*deferrun.SignalHandler)(nil), sHandler)
+
+	sHandlerValue := reflect.Indirect(reflect.ValueOf(sHandler))
+
+	signals := sHandlerValue.FieldByName("signals")
+	assert.EqualValues(t, 3, signals.Len())
+
+	deferredFuncs := sHandlerValue.FieldByName("deferredFuncs")
+	assert.EqualValues(t, 2, deferredFuncs.Len())
 }
 
 func TestCustomSignals(t *testing.T) {
-	term := DeferRun{
-		Signals: []os.Signal{os.Interrupt, syscall.SIGTERM},
-	}
-	assert.EqualValues(t, 2, len(term.Signals))
-	assert.EqualValues(t, []os.Signal{os.Interrupt, syscall.SIGTERM}, term.Signals)
+	sHandler := deferrun.NewSignalHandler(syscall.SIGTERM, syscall.SIGINT)
+	assert.Implements(t, (*deferrun.SignalHandler)(nil), sHandler)
+
+	sHandlerValue := reflect.Indirect(reflect.ValueOf(sHandler))
+
+	signals := sHandlerValue.FieldByName("signals")
+	assert.EqualValues(t, 2, signals.Len())
+
+	deferredFuncs := sHandlerValue.FieldByName("deferredFuncs")
+	assert.EqualValues(t, 0, deferredFuncs.Len())
 }

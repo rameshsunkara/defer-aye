@@ -2,8 +2,10 @@
 
 # Defer Run (deferrun)
 
-Provides a utility to ensure given function(s) are always executed. 
-Given functions are executed in LIFO (Last In First Out) order just like `defer`.
+A utility to execute given functions when the configured signal fires.
+Functions are executed in LIFO order just like `defer` statements.
+
+The default behavior is designed to facilitate executing function(s) on application termination. 
 
 ## The Problem
 
@@ -46,11 +48,19 @@ In main
 With the below code, you can be assured that whatever logic you want to run on your service termination, it will always be executed.
 
 ```go
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"github.com/rameshsunkara/deferrun"
+)
+
 func main() {
 	fmt.Println("In main")
-	r := deferrun.DeferRun{}
-	r.OnTerminate(closeDBConnection)
-	r.OnTerminate(notifyServiceX)
+	r := deferrun.NewSignalHandler()
+	r.OnSignal(closeDBConnection)
+	r.OnSignal(notifyServiceX)
 	http.ListenAndServe(":8090", nil)
 }
 
@@ -77,19 +87,19 @@ By default, it listens for the following signals:
 		
 	os.Interrupt, syscall.SIGTERM, syscall.SIGINT
 
-If you want to customize the Signals, simply pass the signals you want to listen on:
+If you want to customize the Signals you want to listen, simply pass whichever signals you want:
 
 ```go
-	r := deferrun.DeferRun{
-		Signals: []os.Signal{syscall.SIGINT, syscall.SIGABRT},
-	}
+	r := deferrun.NewSignalHandler(syscall.SIGINT, syscall.SIGABRT)
 ```
+
+## Development
 
 ```bash
 make help
 ```
 
-## Setup
+### Setup
 
 To get your setup up and running the only thing you have to do is
 
@@ -97,7 +107,7 @@ To get your setup up and running the only thing you have to do is
 make all
 ```
 
-## Test & lint
+### Test & lint
 
 Run linting
 
