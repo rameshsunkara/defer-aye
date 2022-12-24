@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	"github.com/rameshsunkara/deferrun"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestOnTerminate(t *testing.T) {
@@ -20,26 +19,31 @@ func TestOnTerminate(t *testing.T) {
 		fmt.Println("Clean func 2")
 	})
 
-	assert.Implements(t, (*deferrun.SignalHandler)(nil), sHandler)
-
 	sHandlerValue := reflect.Indirect(reflect.ValueOf(sHandler))
 
 	signals := sHandlerValue.FieldByName("signals")
-	assert.EqualValues(t, 3, signals.Len())
+	if 3 != signals.Len() {
+		t.Errorf("Expected 3 Signal but got: %d", signals.Len())
+	}
 
 	deferredFuncs := sHandlerValue.FieldByName("deferredFuncs")
-	assert.EqualValues(t, 2, deferredFuncs.Len())
+	if 2 != deferredFuncs.Len() {
+		t.Errorf("Expected 2 deferred functions but got: %d", deferredFuncs.Len())
+	}
 }
 
 func TestCustomSignals(t *testing.T) {
 	sHandler := deferrun.NewSignalHandler(syscall.SIGTERM, syscall.SIGINT)
-	assert.Implements(t, (*deferrun.SignalHandler)(nil), sHandler)
 
 	sHandlerValue := reflect.Indirect(reflect.ValueOf(sHandler))
 
 	signals := sHandlerValue.FieldByName("signals")
-	assert.EqualValues(t, 2, signals.Len())
+	if 2 != signals.Len() {
+		t.Errorf("Expected 2 Signal but got: %d", signals.Len())
+	}
 
 	deferredFuncs := sHandlerValue.FieldByName("deferredFuncs")
-	assert.EqualValues(t, 0, deferredFuncs.Len())
+	if 0 != deferredFuncs.Len() {
+		t.Errorf("Expected 0 deferred functions but got: %d", deferredFuncs.Len())
+	}
 }
